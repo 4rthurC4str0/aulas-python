@@ -1,1 +1,0 @@
-print("Agora é no hyprland")
