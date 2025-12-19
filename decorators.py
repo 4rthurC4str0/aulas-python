@@ -1,13 +1,16 @@
-def parametros_decorador(nome):
-    def decorador(func):
-        print('Decorador:', nome)
 
-        def sua_nova_funcao(*args, **kwargs):
-            res = func(*args, **kwargs)
-            final = f'{res} {nome}'
-            return final
-        return sua_nova_funcao
-    return decorador
+def decorador(func):
+
+    def sua_nova_funcao(*args, **kwargs):
+        # aqui eu não posso chamar soma direto pois pode dar recursão
+        # já que soma agora aponta para sua_nova_funcao
+        # mas como eu armazenei a soma no parametro do decorador 
+        # eu posso usar o parametro e assim só executa uma fez
+        res = func(*args, **kwargs) 
+        final = f'{res}'
+        return final
+    return sua_nova_funcao
+
 
 
 #cada decorador retorna uma nova função "embrulhada", que ao ser chamada retorna a função original adiconando algo novo
@@ -16,11 +19,8 @@ def parametros_decorador(nome):
 #Ao chamar soma(10, 5), você aciona a primeira camada (nome='5'), 
 # que chama a segunda (nome='4'), que chama a terceira (nome='3'),  
 # e assim por diante... até chegar na original soma(x, y).
-@parametros_decorador(nome='5')
-@parametros_decorador(nome='4')
-@parametros_decorador(nome='3')
-@parametros_decorador(nome='2')
-@parametros_decorador(nome='1')
+
+@decorador
 def soma(x, y):
     return x + y
 #Cada chamada de "@parametros_decorador" você vai ter uma chamada de "sua_nova_funcao"
